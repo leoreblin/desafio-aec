@@ -135,7 +135,7 @@ namespace DesafioAeC.Automation.Services
                 }
             }
 
-            return string.Join(", ", nomesProfessores.Distinct());
+            return string.Join(", ", nomesProfessores));
         }
 
         private string GetNomeProfessoresBySectionXPath()
@@ -162,11 +162,9 @@ namespace DesafioAeC.Automation.Services
                 {
                     nomesProfessores.Add(nome);
                 }
-
-                nomesProfessores.Add(nome);
             }
 
-            return string.Join(", ", nomesProfessores.Distinct());
+            return string.Join(", ", nomesProfessores);
         }
 
         private bool IsElementPresent(By by)
