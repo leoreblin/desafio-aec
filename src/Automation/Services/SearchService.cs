@@ -135,7 +135,7 @@ namespace DesafioAeC.Automation.Services
                 }
             }
 
-            return string.Join(", ", nomesProfessores));
+            return string.Join(", ", nomesProfessores);
         }
 
         private string GetNomeProfessoresBySectionXPath()
