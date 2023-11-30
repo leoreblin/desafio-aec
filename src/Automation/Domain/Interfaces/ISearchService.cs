@@ -1,9 +1,11 @@
-﻿using DesafioAeC.Automation.Domain.Entities;
+﻿using DesafioAeC.AluraRPA.Domain.Abstractions;
+using DesafioAeC.Automation.Domain.Entities;
 
 namespace DesafioAeC.Automation.Domain.Interfaces
 {
     public interface ISearchService
     {
-        Task<List<SearchResult>> SearchAsync(string query);
+        Task OpenBrowser(string url);
+        Task<Result<List<SearchResult>>> SearchAsync(string query);
     }
 }

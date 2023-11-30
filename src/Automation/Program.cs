@@ -1,40 +1,51 @@
-﻿using DesafioAeC.Automation.Domain.Interfaces;
-using DesafioAeC.Automation.Services;
+﻿using DesafioAeC.AluraRPA.Extensions;
+using DesafioAeC.Automation.Domain.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 class Program
 {
-    static async void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        var serviceProvider = new ServiceCollection()
-            .AddTransient<ISearchService, SearchService>()
-            .BuildServiceProvider();
+        var builder = new HostBuilder()
+            .ConfigureServices(services => services.ConfiureServices());
+
+        var host = builder.Build();
 
         try
         {
-            var searchService = serviceProvider.GetService<ISearchService>();
+            var searchService = host.Services.GetRequiredService<ISearchService>();
             ArgumentNullException.ThrowIfNull(searchService);
 
             Console.WriteLine("Inicializando RPA com Selenium...");
             Console.WriteLine("Esta aplicação utilizará o browser Firefox.");
-            
-            string? query;
-            do
-            {
-                Console.WriteLine("Por favor, insira o termo de busca que deseja: ");
-                query = Console.ReadLine();
 
-            } while (string.IsNullOrEmpty(query));
-            
-            var results = await searchService.SearchAsync(query);
+            await searchService.OpenBrowser("https://www.alura.com.br");
+            Thread.Sleep(1000);
 
-            foreach (var result in results)
+            string query = "C#";
+
+            Console.WriteLine($"Termo de pesquisa para este teste automatizado: {query}");
+
+            var result = await searchService.SearchAsync(query);
+
+            if (result.IsFailure)
             {
-                Console.WriteLine($"Titulo: {result.Titulo}");
-                Console.WriteLine($"Professor: {result.Professor}");
-                Console.WriteLine($"Carga Horária: {result.CargaHoraria}");
-                Console.WriteLine($"Descrição: {result.Descricao}");
-                Console.WriteLine("--------------------------------");
+                Console.WriteLine(result.ErrorMessage);
+            }
+
+            Console.WriteLine("Processo de RPA concluído com sucesso.");
+            if (result.Value is not null)
+            {
+                Console.WriteLine("Abaixo estão os registros encontrados:\n");
+                foreach (var item in result.Value)
+                {
+                    Console.WriteLine($"Título: {item.Titulo}");
+                    Console.WriteLine($"Professor: {item.Professor}");
+                    Console.WriteLine($"Carga Horária: {item.CargaHoraria}");
+                    Console.WriteLine($"Descrição: {item.Descricao}");
+                    Console.WriteLine("--------------------------------------");
+                }
             }
         }
         catch (Exception ex)
