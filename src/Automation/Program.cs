@@ -34,9 +34,9 @@ class Program
                 Console.WriteLine(result.ErrorMessage);
             }
 
-            Console.WriteLine("Processo de RPA concluído com sucesso.");
             if (result.Value is not null)
             {
+                Console.WriteLine("Processo de RPA concluído com sucesso.");
                 Console.WriteLine("Abaixo estão os registros encontrados:\n");
                 foreach (var item in result.Value)
                 {
