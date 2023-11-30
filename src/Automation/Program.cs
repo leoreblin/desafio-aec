@@ -31,12 +31,13 @@ class Program
 
             if (result.IsFailure)
             {
-                Console.WriteLine(result.ErrorMessage);
+                throw new Exception(result.ErrorMessage);
             }
 
+            Console.WriteLine("Processo de RPA concluído com sucesso.");
+
             if (result.Value is not null)
-            {
-                Console.WriteLine("Processo de RPA concluído com sucesso.");
+            {                
                 Console.WriteLine("Abaixo estão os registros encontrados:\n");
                 foreach (var item in result.Value)
                 {
@@ -50,7 +51,7 @@ class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Um erro ocorreu durante o processo. {ex.Message}");
+            Console.WriteLine($"Um erro ocorreu durante o processo: {ex.Message}");
         }
     }
 }
